@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META name="Author" content="Pearu Peterson">
+<!-- You may add here some keywords (comma separeted list) -->
+<META name="Keywords" content="python,vtk,pyvtk">
+<TITLE>PyVTK - Manipulate VTK files in Python</TITLE>
+<LINK rel="stylesheet" type="text/css" href="/styles/userstyle.css">
+</HEAD>
+
+<BODY>
+<!-- Begin of user text -->
+<H1>PyVTK &shy; Tools for manipulating VTK files in Python</H1>
+by <em>Pearu Peterson</em>
+
+<h2>What's new?</h2>
+
+<dl>
+  <dt> 0.4.74 (Feb 22, 2007)
+  <dd> Minor bug fixes.
+  <dt> 0.4.71 (May 18, 2006)
+  <dd> Added numpy support. Bug fixes.
+  <dt> 0.4.66 (January 26, 2003)
+  <dd> Fixed binary write of UnstructuredGrid.
+  <dt> 0.4.62 (November 19, 2002)
+  <dd> Minor fixes.
+  <dt> 0.4 (September 2, 2002)
+  <dd> Writing binary files works (thanks to Hans Fangohr).
+  <dt> 0.4 (June 8, 2001)
+  <dd> VTK files reader (only for Python 2.x). Usage: <code>VtkData(filename)</code>
+  <dt> 0.3 (May 21, 2001)
+  <dd> First release.
+</dl>
+
+
+<h2>Introduction</h2>
+
+<p>
+PyVTK provides the following tools for manipulating <a
+href="http://www.kitware.com/">Visualization Toolkit (VTK)</a> files in Python:
+
+<dl>
+  <dt>VtkData
+  <dd>Create VTK file from Python objects. It fully
+      supports <a href="http://www.vtk.org/pdf/file-formats-2.2.pdf">VTK
+      File Formats Standard 2.0</a>
+      (see also <a href="http://www.vtk.org/pdf/file-formats.pdf">VTK
+      File Formats Standard 3.0</a>).
+      The features include:
+      <ul>
+	<li>ascii and binary output, ascii input from VTK file
+	<li>DataSet formats:
+	    StructuredPoints, StructuredGrid, RectilinearGrid,
+	    PolyData, UnstructuredGrid
+	<li>Data formats:
+                 PointData, CellData
+	<li>DataSetAttr formats:
+	    Scalars, ColorScalars, LookupTable, Vectors, 
+	    Normals, TextureCoordinates, Tensors, Field
+      </ul>
+</dl>
+
+<h3>Related software</h3>
+<ul>
+  <li> <a href="http://mayavi.sourceforge.net">MayaVi</a> - free, easy
+      to use scientific data visualizer, written in Python by Prabhu
+      Ramachandran.
+</ul>
+
+
+<h3>Requirements</h3>
+<ol>
+  <li> <a href="http://www.python.org/download/">Python</a> (PyVTK is developed under Python 2.1, but it is tested to work also with Python 1.5.2 and 2.0)
+</ol>
+
+<h3>Download</h3>
+
+<dl>
+  <dt> Snapshots of release:
+  <dd> <a href="rel-0.x">rel-0.x</a>/<a href="rel-0.x/PyVTK-0.latest.tar.gz">PyVTK-0.latest.tar.gz</a>
+</dl>
+
+<h3>Installation</h3>
+
+<p>
+To install <code>PyVTK</code>, unpack the source file, change to directory <code>PyVTK-?.?.?</code> and
+run <code>python setup.py install</code>, or <code>make install</code> if under Python 1.x.
+
+<h3><a href="http://cens.ioc.ee/cgi-bin/cvsweb/python/pyvtk/">CVS Repository</a></h3>
+
+<code>PyVTK</code> is being developed under
+<a href="http://www.sourcegear.com/CVS">CVS</a> and those who are
+interested in the latest version of <code>PyVTK</code> (possibly
+unstable) can get it from the repository as follows:
+<ol>
+  <li> First you need to login (the password is <code>guest</code>):
+<pre>
+> cvs -d :pserver:anonymous@cens.ioc.ee:/home/cvs login
+</pre>
+  <li> and then do the checkout:
+<pre>
+> cvs -z6 -d :pserver:anonymous@cens.ioc.ee:/home/cvs checkout python/pyvtk
+</pre>
+  <li> In the directory <code>pyvtk</code> you can get the updates by hitting
+<pre>
+> cvs -z6 update -P -d
+</pre>
+</ol>
+You can browse <code>PyVTK</code> CVS repository <a href="http://cens.ioc.ee/cgi-bin/cvsweb/python/pyvtk/">here</a>.
+
+<!-- End of user text -->
+<HR>
+<ADDRESS>
+<A href="http://cens.ioc.ee/~pearu/" target="_top">Pearu Peterson</A>
+<A href="mailto:pearu@cens.ioc.ee">&lt;pearu@cens.ioc.ee&gt;</A><BR>
+<!-- hhmts end -->
+Last modified: Fri May 18 16:44:25 EET 2006
+<!-- hhmts end -->
+</ADDRESS>
+
+</BODY>
+</HTML>
+
+
+

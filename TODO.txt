@@ -1,0 +1,11 @@
+* April 7, 2003
+  Implement vtk File Formats 3.0 support
+
+* May 31, 2001:
+  Need more efficient VTK data reader.
+
+* May 21, 2001:
+  Get binary output working [DONE. Thanks to Hans Fangohr].
+  Document relevant classes and relevant methods [DONE].
+  Figure out how to use the SCALARS numComp flag and implement its support.
+  More tests and examples ...

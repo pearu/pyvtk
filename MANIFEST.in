@@ -1,0 +1,10 @@
+recursive-include tools *.py
+recursive-include examples *.py
+recursive-include lib *.py
+recursive-include lib152 *.py
+include doc/*.html
+include BUGS.txt
+include TODO.txt
+include NEWS.txt
+include Makefile
+include MANIFEST.in

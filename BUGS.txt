@@ -1,0 +1,4 @@
+
+* numpy matrix objects confuses common.is_sequence() functions.
+
+
