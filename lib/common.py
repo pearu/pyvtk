@@ -10,8 +10,7 @@ Permission to use, modify, and distribute this software is given under the
 terms of the LGPL.  See http://www.fsf.org
 
 NO WARRANTY IS EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK.
-$Revision: 1.13 $
-$Date: 2007-02-22 12:15:46 $
+$Revision: 1.14 $
 Pearu Peterson
 """
 
@@ -86,10 +85,15 @@ def _getline(f):
 
 class Common:
     """Abstract class. Defines output, checker, and getter functions."""
-    struct_fmt_map = {'char':'c',
+    struct_fmt_map = {'char':'c','char':'b',
                       'long':'l','double':'d',
+                      'unsigned long':'L',
                       'int':'i','float':'f',
-                      'unsigned char':'B'}
+                      'unsigned char':'B',
+                      'unsigned short':'H',
+                      'short':'h',
+                      'unsigned int':'I',
+    }
     default_int = 'int'
     default_float = 'float'
     def _get_trace(self,m):
@@ -124,24 +128,28 @@ class Common:
             typecode = obj.typecode()
 
         if typecode is not None:
-            r =  {'b':'unsigned_char', #'bit'??
+            r =  {'b':'char', #'bit'??
+                  'B':'unsigned_char',
                   'f':'float', 
                   'd':'double',
                   'i':'int',
                   'l':'long',
+                  'L':'unsigned_long',
                   '1':'char',
-                  's':'short',
-                  'w':'unsigned_short',
-                  'u':'unsigned_int'
-                  #'?':'unsigned_long'
+                  's':'short', # Numeric
+                  'h':'short',
+                  'w':'unsigned_short', # Numeric
+                  'H':'unsigned_short',
+                  'u':'unsigned_int', # Numeric
+                  'I':'unsigned_int',
                   }.get(typecode)
             if r is not None:
                 return r
         if is_int(obj): return self.default_int
         if is_float(obj): return self.default_float
         if not is_sequence(obj):
-            raise ValueError,'expected int|float|non-empty sequence but got %s'\
-                  %(type(obj))
+            raise ValueError,'expected int|float|non-empty sequence but got %s (typecode=%r)'\
+                  %(type(obj), typecode)
         if not len(obj):
             self.warning('no data, no datatype, using int')
             r = 'int'
@@ -285,7 +293,10 @@ class Common:
                 try:
                     fmt = self.struct_fmt_map[datatype]
                 except KeyError:
-                    fmt = None
+                    try:
+                        fmt = self.struct_fmt_map[datatype.replace('_',' ')]
+                    except KeyError:
+                        fmt = None
                 if fmt:
                     r = struct.pack('!'+fmt*len(seq),*seq)
                     return r
