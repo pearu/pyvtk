@@ -19,7 +19,7 @@ execfile(version_file)
 
 if sys.version[:3]>='2.3':
     config = dict(\
-        download_url='http://cens.ioc.ee/projects/pyvtk/rel-0.x/PyVTK-0.latest.tar.gz',
+        download_url='https://pypi.python.org/pypi/PyVTK/',
         keywords = ['VTK'],
         classifiers=[
         'Development Status :: 4 - Beta',
@@ -39,15 +39,15 @@ setup (name = "PyVTK",
        version = __version__,
        description = "PyVTK - tools for manipulating VTK files in Python",
        author = "Pearu Peterson",
-       author_email = "pearu@cens.ioc.ee",
+       author_email = "pearu.peterson@gmail.com",
        maintainer = "Pearu Peterson",
-       maintainer_email = "pearu@cens.ioc.ee",
-       license = "LGPL",
+       maintainer_email = "pearu.peterson@gmail.com",
+       license = "New BSD",
        long_description= """\
 PyVTK provides tools for manipulating VTK (Visualization Toolkit)
 files in Python:
   VtkData - create VTK files from Python / read VTK files to Python.""",
-       url = "http://cens.ioc.ee/projects/pyvtk/",
+       url = "https://code.google.com/p/pyvtk/",
        packages = ['pyvtk'],
        package_dir = {'pyvtk':{'2':'lib','1':'lib152'}[sys.version[0]]},
        **config

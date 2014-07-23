@@ -4,7 +4,7 @@
                           by
                      Pearu Peterson
 
-http://cens.ioc.ee/projects/pyvtk/
+https://code.google.com/p/pyvtk/
 
 INTRODUCTION
 ------------
