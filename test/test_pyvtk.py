@@ -6,14 +6,12 @@ Test reading and writting vtk files.
 Input files are taken from examples/ directory.
 """
 
-import sys
 import unittest
 from shutil import  rmtree
 from os.path import isdir, join
 from os import mkdir
 
-sys.path = ['..']+sys.path
-from lib import *
+from pyvtk import *
 
 class TestBase(unittest.TestCase):
     """
