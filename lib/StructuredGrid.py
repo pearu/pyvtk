@@ -15,8 +15,8 @@ $Date: 2007-02-22 08:43:39 $
 Pearu Peterson
 """
 
-import DataSet
-import common
+import pyvtk.DataSet as DataSet
+import pyvtk.common as common
 
 class StructuredGrid(DataSet.DataSet):
     """
@@ -38,7 +38,7 @@ class StructuredGrid(DataSet.DataSet):
         self.dimensions = self.get_3_tuple(dimensions,(1,1,1))
         self.points = self.get_3_tuple_list(points,(0,0,0))
         if self._check_dimensions():
-            raise ValueError,'dimensions must be 3-tuple of ints >=1 and matching with the size of points'
+            raise ValueError('dimensions must be 3-tuple of ints >=1 and matching with the size of points')
 
     def to_string(self, format='ascii'):
         t = self.get_datatype(self.points)
@@ -62,9 +62,9 @@ def structured_grid_fromfile(f,self):
     l = common._getline(f)
     k,n,datatype = [s.strip().lower() for s in l.split(' ')]
     if k!='points':
-        raise ValueError, 'expected points but got %s'%(`k`)
+        raise ValueError( 'expected points but got %s'%(repr(k)))
     n = eval(n)
-    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],`datatype`
+    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     points = []
     self.message('\tgetting %s points'%n)
     while len(points) < 3*n:
@@ -74,4 +74,4 @@ def structured_grid_fromfile(f,self):
     return StructuredGrid(dims,points),common._getline(f)
 
 if __name__ == "__main__":
-    print StructuredGrid((1,2),[1,2,2,4,4,5.4])
+    print(StructuredGrid((1,2),[1,2,2,4,4,5.4]))

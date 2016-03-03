@@ -17,7 +17,7 @@ Pearu Peterson
 
 __version__ = "$Id: DataSetAttr.py,v 1.2 2001/05/31 17:48:54 pearu Exp $"
 
-import common
+import pyvtk.common as common
 
 class DataSetAttr(common.Common):
     """Abstract class for VTK data."""
@@ -33,23 +33,26 @@ class DataSetAttr(common.Common):
     def _get_name(self,name):
         if name is None:
             name = self._get_default_name()
-            self.warning('Using name=%s'%(`name`))
+            self.warning('Using name=%s'%(repr(name)))
             return name
         if common.is_string(name):
             name = name.strip().replace(' ','_')
             if name:
                 return name
-        raise ValueError,'name=%s must be non-empty string'%(`name`)
+        raise ValueError('name=%s must be non-empty string'%(repr(name)))
     def _get_lookup_table(self,name):
         if name is None:
             name = 'default'
-            self.warning('Using lookup_table=%s'%(`name`))
+            self.warning('Using lookup_table=%s'%(repr(name)))
             return name
         if common.is_string(name):
             name = name.strip().replace(' ','_')
             if name:
                 return name
-        raise ValueError,'lookup_table=%s must be nonempty string'%(`name`)
+        raise ValueError('lookup_table=%s must be nonempty string'%(repr(name)))
+
+def is_datasetattr(obj):
+    return isinstance(obj,DataSetAttr)
 
 if __name__ == "__main__":
     pass

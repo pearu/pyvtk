@@ -24,7 +24,7 @@ for d in ['lib']:
         if f[-3:]=='.py' or f[-2:]=='.c':
             fn = os.path.join(d,f)
             if os.path.exists(fn): files.append(fn)
-            else: print 'File "%s" does not exists. Skipping.'%(fn)
+            else: print('File "%s" does not exists. Skipping.'%(fn))
 
 revision_version = 0
 for l in fileinput.input(files):

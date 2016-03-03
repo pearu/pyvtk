@@ -8,13 +8,13 @@ version_file = os.path.join('lib','__version__.py')
 if 1 or not os.path.exists(version_file):
     major_version = 0
     minor_version = 4
-    execfile(os.path.join('tools','get_revision.py'))
+    revisions_file =os.path.join('tools','get_revision.py')
+    exec(open(revisions_file).read())
     __version__='%d.%d.%d'%(major_version,minor_version,revision_version)
-    for l in ['lib','lib152']:
-        f = open(os.path.join(l,'__version__.py'),'w')
-        f.write('__version__ = "%s"\n'%(__version__))
-        f.close()
-execfile(version_file)
+    f = open(os.path.join('lib/__version__.py'),'w')
+    f.write('__version__ = "%s"\n'%(__version__))
+    f.close()
+exec(open(version_file).read())
 
 
 if sys.version[:3]>='2.3':
@@ -34,7 +34,7 @@ if sys.version[:3]>='2.3':
 else:
     config = {}
 
-print "PyVTK Version",__version__
+print("PyVTK Version",__version__)
 setup (name = "PyVTK",
        version = __version__,
        description = "PyVTK - tools for manipulating VTK files in Python",
@@ -49,7 +49,7 @@ files in Python:
   VtkData - create VTK files from Python / read VTK files to Python.""",
        url = "https://code.google.com/p/pyvtk/",
        packages = ['pyvtk'],
-       package_dir = {'pyvtk':{'2':'lib','1':'lib152'}[sys.version[0]]},
+       package_dir = {'pyvtk': 'lib'},
        **config
        )
 

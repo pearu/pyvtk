@@ -16,10 +16,10 @@ $Revision: 1.12 $
 $Date: 2010-03-03 13:41:41 $
 Pearu Peterson
 """
+from pyvtk.__version__ import __version__
 
 __author__ = "Pearu Peterson <pearu@cens.ioc.ee>"
 __license__ = "LGPL (see http://www.fsf.org)"
-from __version__ import __version__
 
 __all__ = ['StructuredPoints','StructuredGrid','UnstructuredGrid',
            'RectilinearGrid','PolyData',
@@ -28,26 +28,27 @@ __all__ = ['StructuredPoints','StructuredGrid','UnstructuredGrid',
            'PointData','CellData',
            'VtkData']
 
-import types
 import os
-import common
 
-from StructuredPoints import StructuredPoints, structured_points_fromfile
-from StructuredGrid import StructuredGrid, structured_grid_fromfile
-from UnstructuredGrid import UnstructuredGrid, unstructured_grid_fromfile
-from RectilinearGrid import RectilinearGrid, rectilinear_grid_fromfile
-from PolyData import PolyData, polydata_fromfile
+import pyvtk.common as common
 
-from Scalars import Scalars,scalars_fromfile
-from ColorScalars import ColorScalars, color_scalars_fromfile
-from LookupTable import LookupTable, lookup_table_fromfile
-from Vectors import Vectors, vectors_fromfile
-from Normals import Normals, normals_fromfile
-from TextureCoordinates import TextureCoordinates, texture_coordinates_fromfile
-from Tensors import Tensors, tensors_fromfile
-from Field import Field, field_fromfile
+from pyvtk.StructuredPoints import StructuredPoints, structured_points_fromfile
+from pyvtk.StructuredGrid import StructuredGrid, structured_grid_fromfile
+from pyvtk.UnstructuredGrid import UnstructuredGrid, unstructured_grid_fromfile
+from pyvtk.RectilinearGrid import RectilinearGrid, rectilinear_grid_fromfile
+from pyvtk.PolyData import PolyData, polydata_fromfile
 
-from Data import PointData,CellData
+from pyvtk.Scalars import Scalars,scalars_fromfile
+from pyvtk.ColorScalars import ColorScalars, color_scalars_fromfile
+from pyvtk.LookupTable import LookupTable, lookup_table_fromfile
+from pyvtk.Vectors import Vectors, vectors_fromfile
+from pyvtk.Normals import Normals, normals_fromfile
+from pyvtk.TextureCoordinates import TextureCoordinates, texture_coordinates_fromfile
+from pyvtk.Tensors import Tensors, tensors_fromfile
+from pyvtk.Field import Field, field_fromfile
+
+from pyvtk.Data import PointData,CellData, is_pointdata, is_celldata
+from pyvtk.DataSet import is_dataset
 
 class VtkData(common.Common):
     """
@@ -122,8 +123,8 @@ class VtkData(common.Common):
     cell_data = None
     def __init__(self,*args,**kws):
         assert args,'expected at least one argument'
-        if type(args[0]) is types.StringType:
-            if kws.has_key('only_structure') and kws['only_structure']:
+        if type(args[0]) is str:
+            if 'only_structure' in kws and kws['only_structure']:
                 self.fromfile(args[0],1)
             else:
                 self.fromfile(args[0])
@@ -131,23 +132,23 @@ class VtkData(common.Common):
         else:
             structure = args[0]
             args = list(args)[1:]
-        if not common.is_dataset(structure):
-            raise TypeError,'argument structure must be StructuredPoints|StructuredGrid|UnstructuredGrid|RectilinearGrid|PolyData but got %s'%(type(structure))
+        if not is_dataset(structure):
+            raise TypeError('argument structure must be StructuredPoints|StructuredGrid|UnstructuredGrid|RectilinearGrid|PolyData but got %s'%(type(structure)))
         self.structure = structure
         for a in args:
             if common.is_string(a):
                 if len(a)>255:
                     self.skipping('striping header string to a length =255')
                 self.header = a[:255]
-            elif common.is_pointdata(a):
+            elif is_pointdata(a):
                 self.point_data = a
-            elif common.is_celldata(a):
+            elif is_celldata(a):
                 self.cell_data = a
             else:
                 self.skipping('unexpexted argument %s'%(type(a)))
         if self.header is None:
             self.header = 'Really cool data'
-            self.warning('Using header=%s'%(`self.header`))
+            self.warning('Using header=%s'%(repr(self.header)))
         if self.point_data is None and self.cell_data is None:
             self.warning('No data defined')
 
@@ -155,42 +156,40 @@ class VtkData(common.Common):
             s = self.structure.get_size()
             s1 = self.point_data.get_size()
             if s1 != s:
-                raise ValueError,'DataSet (size=%s) and PointData (size=%s) have different sizes'%(s,s1)
+                raise ValueError('DataSet (size=%s) and PointData (size=%s) have different sizes'%(s,s1))
         else:
             self.point_data = PointData()
         if self.cell_data is not None:
             s = self.structure.get_cell_size()
             s1 = self.cell_data.get_size()
             if s1 != s:
-                raise ValueError,'DataSet (cell_size=%s) and CellData (size=%s) have different sizes'%(s,s1)
+                raise ValueError('DataSet (cell_size=%s) and CellData (size=%s) have different sizes'%(s,s1))
         else:
             self.cell_data = CellData()
     def to_string(self, format = 'ascii'):
-        ret = ['# vtk DataFile Version 2.0',
-               self.header,
-               format.upper(),
+        ret = [b'# vtk DataFile Version 2.0',
+               self.header.encode(),
+               format.upper().encode(),
                self.structure.to_string(format)
                ]
         if self.cell_data.data:
             ret.append(self.cell_data.to_string(format))
         if self.point_data.data:
             ret.append(self.point_data.to_string(format))
-        #print `ret`
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
 
     def tofile(self, filename, format = 'ascii'):
         """Save VTK data to file.
         """
         if not common.is_string(filename):
-            raise TypeError,'argument filename must be string but got %s'%(type(filename))
+            raise TypeError('argument filename must be string but got %s'%(type(filename)))
         if format not in ['ascii','binary']:
-            raise TypeError,'argument format must be ascii | binary'
+            raise TypeError('argument format must be ascii | binary')
         filename = filename.strip()
         if not filename:
-            raise ValueError,'filename must be non-empty string'
+            raise ValueError('filename must be non-empty string')
         if filename[-4:]!='.vtk':
             filename += '.vtk'
-        #print 'Creating file',`filename`
         f = open(filename,'wb')
         f.write(self.to_string(format))
         f.close()
@@ -199,26 +198,24 @@ class VtkData(common.Common):
         filename = filename.strip()
         if filename[-4:]!='.vtk':
             filename += '.vtk'
-        #print 'Reading file',`filename`
         f = open(filename,'rb')
         l = f.readline()
         fileversion = l.strip().replace(' ','').lower()
         if not fileversion == '#vtkdatafileversion2.0':
-            print 'File %s is not in VTK 2.0 format, got %s' % (filename, fileversion),
-            print ' but continuing anyway..'
+            print('File %s is not in VTK 2.0 format, got %s but continuing anyway..' % (filename, fileversion))
         self.header = f.readline().rstrip()
         format = f.readline().strip().lower()
         if format not in ['ascii','binary']:
-            raise ValueError,'Expected ascii|binary but got %s'%(`format`)
+            raise ValueError('Expected ascii|binary but got %s'%(repr(format)))
         if format == 'binary':
-            raise NotImplementedError,'reading vtk binary format'
+            raise NotImplementedError('reading vtk binary format')
         l = common._getline(f).lower().split(' ')
         if l[0].strip() != 'dataset':
-            raise ValueError,'expected dataset but got %s'%(l[0])
+            raise ValueError('expected dataset but got %s'%(l[0]))
         try:
             ff = eval(l[1]+'_fromfile')
         except NameError:
-            raise NotImplementedError,'%s_fromfile'%(l[1])
+            raise NotImplementedError('%s_fromfile'%(l[1]))
         self.structure,l = ff(f,self)
 
         for i in range(2):
@@ -240,7 +237,7 @@ class VtkData(common.Common):
                 try:
                     ff = eval(k+'_fromfile')
                 except NameError:
-                    raise NotImplementedError,'%s_fromfile'%(k)
+                    raise NotImplementedError('%s_fromfile'%(k))
                 lst.append(ff(f,n,sl[1:]))
             if data == 'point_data':
                 self.point_data = PointData(*lst)

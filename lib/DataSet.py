@@ -16,8 +16,17 @@ Pearu Peterson
 """
 
 __version__ = "$Id: DataSet.py,v 1.3 2001/05/31 17:48:54 pearu Exp $"
+import types
 
-import common
+import pyvtk.common as common
+import pyvtk.Scalars as Scalars
+import pyvtk.ColorScalars as ColorScalars
+import pyvtk.LookupTable as LookupTable
+import pyvtk.Vectors as Vectors
+import pyvtk.Normals as Normals
+import pyvtk.TextureCoordinates as TextureCoordinates
+import pyvtk.Tensors as Tensors
+import pyvtk.Field as Field
 
 class DataSet(common.Common):
     """Abstract class.
@@ -87,11 +96,5 @@ class DataSet(common.Common):
     def Field(self,func,name = None, **kws):
         return Field.Field([func(*p) for p in self.get_points()],name, **kws)
 
-import Scalars
-import ColorScalars
-import LookupTable
-import Vectors
-import Normals
-import TextureCoordinates
-import Tensors
-import Field
+def is_dataset(obj):
+    return isinstance(obj,DataSet)

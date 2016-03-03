@@ -15,8 +15,8 @@ $Date: 2001/05/31 17:48:54 $
 Pearu Peterson
 """
 
-import DataSet
-import common
+import pyvtk.DataSet as DataSet
+import pyvtk.common as common
 
 class StructuredPoints(DataSet.DataSet):
     """
@@ -37,13 +37,13 @@ class StructuredPoints(DataSet.DataSet):
     def __init__(self,dimensions,origin=(0,0,0),spacing=(1,1,1)):
         self.dimensions = self.get_3_tuple(dimensions,(1,1,1))
         if self._check_dimensions():
-            raise ValueError,'dimensions must be 3-tuple of ints >=1'
+            raise(ValueError,'dimensions must be 3-tuple of ints >=1')
         self.origin = self.get_3_tuple(origin,(1,1,1))
         if self._check_origin():
-            raise ValueError,'origin must be 3-tuple of numbers'
+            raise(ValueError,'origin must be 3-tuple of numbers')
         self.spacing = self.get_3_tuple(spacing,(1,1,1))
         if self._check_spacing():
-            raise ValueError,'spacing must be 3-tuple of positive numbers'
+            raise(ValueError,'spacing must be 3-tuple of positive numbers')
 
     def to_string(self,format = 'ascii'):
         ret = ['DATASET STRUCTURED_POINTS',
@@ -81,7 +81,7 @@ def structured_points_fromfile(f,self):
     return StructuredPoints(dims,origin,spacing),common._getline(f)
     
 if __name__ == "__main__":
-    print StructuredPoints((2,3,4))
-    print StructuredPoints((2,3))
-    print StructuredPoints(5)
-    print StructuredPoints([2,3,5,6]).get_size()
+    print(StructuredPoints((2,3,4)))
+    print(StructuredPoints((2,3)))
+    print(StructuredPoints(5))
+    print(StructuredPoints([2,3,5,6]).get_size())

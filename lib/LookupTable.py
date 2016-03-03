@@ -17,8 +17,8 @@ Pearu Peterson
 
 __version__ = "$Id: LookupTable.py,v 1.2 2001/05/31 17:48:54 pearu Exp $"
 
-import common
-import DataSetAttr
+import pyvtk.common as common
+import pyvtk.DataSetAttr as DataSetAttr
 
 class LookupTable(DataSetAttr.DataSetAttr):
     """Holds VTK LookupTable.
@@ -35,7 +35,7 @@ class LookupTable(DataSetAttr.DataSetAttr):
         self.name = self._get_name(name)
         self.table = self.get_n_seq_seq(table,[0,0,0,0])
         if len(self.table[0])!=4:
-            raise ValueError,'expected sequence of 4-sequences but got %s'%(len(self.table[0]))
+            raise ValueError('expected sequence of 4-sequences but got %s'%(len(self.table[0])))
     def to_string(self,format='ascii'):
         ret = ['LOOKUP_TABLE %s %s'%(self.name,len(self.table))]
         seq = self.table
@@ -64,4 +64,4 @@ def lookup_table_fromfile(f,n,sl):
     return LookupTable(table2,tablename)
 
 if __name__ == "__main__":
-    print LookupTable([[3,3],[4,3],240,3,2]).to_string()
+    print(LookupTable([[3,3],[4,3],240,3,2]).to_string())

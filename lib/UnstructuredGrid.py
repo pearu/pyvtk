@@ -15,8 +15,8 @@ $Date: 2011-10-03 10:16:56 $
 Pearu Peterson
 """
 
-import DataSet
-import common
+import pyvtk.DataSet as DataSet
+import pyvtk.common as common
 
 class UnstructuredGrid(DataSet.DataSet):
     """
@@ -70,26 +70,26 @@ class UnstructuredGrid(DataSet.DataSet):
         self.points = self.get_3_tuple_list(points,(0,0,0))
         sz = len(self.points)
         for k in self._vtk_cell_types_map.keys():
-            exec 'self.%s = self.get_seq_seq(%s,[])'%(k,k)
+            exec('self.%s = self.get_seq_seq(%s,[])'%(k,k))
             if k=='vertex':
                 r = []
                 for v in self.vertex:
                     r += map(lambda a:[a],v)
                 self.vertex = r
             if self._check_int_seq(getattr(self,k),sz):
-                raise ValueError,'In cell %s: must be (seq of seq|seq) integers less than %s'%(k,sz)
+                raise ValueError('In cell %s: must be (seq of seq|seq) integers less than %s'%(k,sz))
         for k,n in self._vtk_cell_nums_map.items():
             if n==-1: continue
             kv = getattr(self,k)
             if kv==[] or kv[0]==[]: continue
             for v in kv:
                 if len(v)!=n:
-                    raise ValueError,'Cell %s requires exactly %s points but got %s: %s'%(`k`,n,len(v),v)
+                    raise ValueError('Cell %s requires exactly %s points but got %s: %s'%(repr(k),n,len(v),v))
 
     def to_string(self,format='ascii'):
         t = self.get_datatype(self.points)
-        ret = ['DATASET UNSTRUCTURED_GRID',
-               'POINTS %s %s'%(self.get_size(),t),
+        ret = [b'DATASET UNSTRUCTURED_GRID',
+               ('POINTS %s %s'%(self.get_size(),t)).encode(),
                self.seq_to_string(self.points,format,t)]
         tps = []
         r = []
@@ -102,13 +102,13 @@ class UnstructuredGrid(DataSet.DataSet):
             for v in kv:
                 tps.append(self._vtk_cell_types_map[k])
                 sz += len(v)+1
-        sep = (format=='ascii' and '\n') or (format=='binary' and '')
+        sep = (format=='ascii' and '\n') or (format=='binary' and b'')
         r = sep.join(r)
-        ret += ['CELLS %s %s'%(len(tps),sz),
+        ret += [('CELLS %s %s'%(len(tps),sz)).encode(),
                 r,
-                'CELL_TYPES %s'%(len(tps)),
+                ('CELL_TYPES %s'%(len(tps))).encode(),
                 self.seq_to_string(tps,format,'int')]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
 
     def get_cell_size(self):
         sz = 0
@@ -124,24 +124,24 @@ def unstructured_grid_fromfile(f,self):
     l = common._getline(f)
     k,n,datatype = [s.strip().lower() for s in l.split()]
     if k!='points':
-        raise ValueError, 'expected points but got %s'%(`k`)
+        raise ValueError( 'expected points but got %s'%(repr(k)))
     n = eval(n)
-    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],`datatype`
+    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     points = []
     self.message('\tgetting %s points'%n)
     while len(points) < 3*n:
-        points += map(eval,common._getline(f).split())
+        points += list(map(eval,common._getline(f).split()))
     assert len(points)==3*n
 
     l = common._getline(f).split()
-    assert len(l)==3 and l[0].strip().lower() == 'cells',`l`
+    assert len(l)==3 and l[0].strip().lower() == 'cells',repr(l)
     n = eval(l[1])
     size = eval(l[2])
     lst = []
     self.message('\tgetting %s cell indexes'%size)
     while len(lst) < size:
         line = common._getline(f)
-        lst += map(eval,line.split())
+        lst += list(map(eval,line.split()))
     assert len(lst)==size
     lst2 = []
     j = 0
@@ -149,22 +149,22 @@ def unstructured_grid_fromfile(f,self):
         lst2.append(lst[j+1:j+lst[j]+1])
         j += lst[j]+1
     l = common._getline(f).split()
-    assert len(l)==2 and l[0].strip().lower() == 'cell_types' and eval(l[1])==n,`l`
+    assert len(l)==2 and l[0].strip().lower() == 'cell_types' and eval(l[1])==n,repr(l)
     tps = []
     self.message('\tgetting %s cell types'%n)
     while len(tps) < n:
-        tps += map(eval,common._getline(f).split())
+        tps += list(map(eval,common._getline(f).split()))
     assert len(tps)==n
-    dict = {}
+    dictionary = {}
     for i,t in zip(lst2,tps):
         k = UnstructuredGrid._vtk_cell_types_imap[t]
-        if not dict.has_key(k):
-            dict[k] = []
-        dict[k].append(i)
+        if k not in dictionary:
+            dictionary[k] = []
+        dictionary[k].append(i)
     self.message('\tdone')
-    return UnstructuredGrid(points,**dict),common._getline(f)
+    return UnstructuredGrid(points,**dictionary),common._getline(f)
 
 if __name__ == "__main__":
-    print UnstructuredGrid([[1,2],[2,4],3,5],
+    print(UnstructuredGrid([[1,2],[2,4],3,5],
                            line = [[2,3],[1,2],[2,3]],
-                           vertex=2)
+                           vertex=2))

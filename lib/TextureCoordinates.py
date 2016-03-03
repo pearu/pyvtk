@@ -15,7 +15,7 @@ $Date: 2001/05/31 17:48:55 $
 Pearu Peterson
 """
 
-import DataSetAttr
+import pyvtk.DataSetAttr as DataSetAttr
 
 class TextureCoordinates(DataSetAttr.DataSetAttr):
     """Holds VTK Texture Coordinates.
@@ -32,7 +32,7 @@ class TextureCoordinates(DataSetAttr.DataSetAttr):
         self.name = self._get_name(name)
         self.coords = self.get_n_seq_seq(scalars,self.default_value)
         if not 1<=len(self.coords[0])<=3:
-            raise ValueError,'texture coordinates dimension must be 1, 2, or 3 but got %s'%(len(self.coords[0]))
+            raise ValueError('texture coordinates dimension must be 1, 2, or 3 but got %s'%(len(self.coords[0])))
     def to_string(self,format='ascii'):
         t = self.get_datatype(self.coords)
         ret = ['TEXTURE_COORDINATES %s %s %s'%(self.name,len(self.coords[0]),t),
@@ -46,7 +46,7 @@ def texture_coordinates_fromfile(f,n,sl):
     dataname = sl[0].strip()
     dim = eval(sl[1])
     datatype = sl[2].strip().lower()
-    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],`datatype`
+    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     arr = []
     while len(arr)<dim*n:
         arr += map(eval,common._getline(f).split(' '))
@@ -57,4 +57,4 @@ def texture_coordinates_fromfile(f,n,sl):
     return TextureCoordinates(arr2,dataname)
 
 if __name__ == "__main__":
-    print TextureCoordinates([[3,3],[4,3],240,3,2]).to_string()
+    print(TextureCoordinates([[3,3],[4,3],240,3,2]).to_string())

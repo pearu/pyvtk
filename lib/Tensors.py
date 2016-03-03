@@ -15,8 +15,8 @@ $Date: 2003/10/13 18:40:49 $
 Pearu Peterson
 """
 
-import DataSetAttr
-import common
+import pyvtk.DataSetAttr as DataSetAttr
+import pyvtk.common as common
 
 class Tensors(DataSetAttr.DataSetAttr):
     """Holds VTK Tensors.
@@ -44,7 +44,7 @@ def tensors_fromfile(f,n,sl):
     assert len(sl)==2
     dataname = sl[0].strip()
     datatype = sl[1].strip().lower()
-    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],`datatype`
+    assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     arr = []
     while len(arr)<9*n:
         arr += map(eval,common._getline(f).split(' '))
@@ -55,5 +55,5 @@ def tensors_fromfile(f,n,sl):
     return Tensors(arr2,dataname)
 
 if __name__ == "__main__":
-    print Tensors([[[3,3]],[4,3.],[[240]],3,2,3]).to_string('ascii')
-    print Tensors(3).to_string('ascii')
+    print(Tensors([[[3,3]],[4,3.],[[240]],3,2,3]).to_string('ascii'))
+    print(Tensors(3).to_string('ascii'))
