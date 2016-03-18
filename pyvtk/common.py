@@ -20,6 +20,9 @@ import struct
 from functools import reduce
 import numpy as np
 
+import logging
+log = logging.getLogger(__name__)
+
 import six
 
 def is_sequence(obj):
@@ -90,30 +93,10 @@ class Common:
     }
     default_int = 'int'
     default_float = 'float'
-    def _get_trace(self,m):
-        try:
-            frame = sys._getframe().f_back
-        except AttributeError: # Python 2.0 does not have sys._getframe
-            frame = None
-        n = ''
-        while frame:
-            i = frame.f_code.co_name
-            n = '%s.%s'%(i,n)
-            if i=='__init__':
-                break
-            frame = frame.f_back
-            
-        print('%s.%s:\n\t%s'%(self.__class__.__name__,n[:-1],m), file=sys.stderr)
-    def warning(self,m=''):
-        self._get_trace(m)
-    def skipping(self,m=''):
-        self._get_trace(m)
-    def error(self,m=''):
-        self._get_trace(m)
-    def message(self,m=''):
-        self._get_trace(m)
+
     def __str__(self):
         return self.to_string()
+
     def get_datatype(self,obj):
         typecode = None
         if hasattr(obj,'dtype'): # obj is numpy array
@@ -145,20 +128,21 @@ class Common:
             raise ValueError('expected int|float|non-empty sequence but got %s (typecode=%r)'\
                   %(type(obj), typecode))
         if not len(obj):
-            self.warning('no data, no datatype, using int')
+            log.warning('no data, no datatype, using int')
             r = 'int'
         for o in obj:
             r = self.get_datatype(o)
             if r==self.default_float:
                 break
         return r
+
     def get_seq(self,obj,default=None):
         """Return sequence."""
         if is_sequence(obj):
             return obj
         if is_number(obj): return [obj]
         if obj is None and default is not None:
-            self.warning('using default value (%s)'%(default))
+            log.warning('using default value (%s)'%(default))
             return self.get_seq(default)
         raise ValueError('expected sequence|number but got %s'%(type(obj)))
     def get_seq_seq(self,obj,default=None):
@@ -183,7 +167,7 @@ class Common:
             else:
                 ret.append(list(v))
         if flag:
-            self.warning('Some items were filled with default value (%s) to obtain size=%s'%(default[0],n))
+            log.warning('Some items were filled with default value (%s) to obtain size=%s'%(default[0],n))
         return ret
     def get_3_tuple(self,obj,default=None):
         """Return 3-tuple from
@@ -200,10 +184,10 @@ class Common:
         if is_sequence(obj):
             n = len(obj)
             if n>3:
-                self.warning('expected 3-sequence but got %s-%s'%(n,type(obj)))
+                log.warning('expected 3-sequence but got %s-%s'%(n,type(obj)))
             if n>=3:
                 return tuple(obj)
-            self.warning('filling with default value (%s) to obtain size=3'%(default[0]))
+            log.warning('filling with default value (%s) to obtain size=3'%(default[0]))
             if default is not None:
                 if n==0:
                     return default
@@ -212,10 +196,10 @@ class Common:
                 elif n==2:
                     return (obj[0],obj[1],default[2])
         elif is_number(obj) and default is not None:
-            self.warning('filling with default value (%s) to obtain size=3'%(default[0]))
+            log.warning('filling with default value (%s) to obtain size=3'%(default[0]))
             return (obj,default[1],default[2])
         elif obj is None and default is not None:
-            self.warning('filling with default value (%s) to obtain size=3'%(default[0]))
+            log.warning('filling with default value (%s) to obtain size=3'%(default[0]))
             return default
         raise ValueError('failed to construct 3-tuple from %s-%s'%(n,type(obj)))
     def get_3_tuple_list(self,obj,default=None):
@@ -243,15 +227,15 @@ class Common:
             return tuple(ret)
         if is_sequence(obj):
             if len(obj)>9:
-                self.warning('ignoring elements obj[i], i>=9')
+                log.warning('ignoring elements obj[i], i>=9')
             r = obj[:9]
             r = [self.get_3_tuple(r[j:j+3],default) for j in range(0,len(r),3)]
             if len(r)<3:
-                self.warning('filling with default value (%s) to obtain size=3'%(default[0]))
+                log.warning('filling with default value (%s) to obtain size=3'%(default[0]))
             while len(r)<3:
                 r.append(self.get_3_tuple(default,default))
             return tuple(r)
-        self.warning('filling with default value (%s) to obtain size=3'%(default[0]))
+        log.warning('filling with default value (%s) to obtain size=3'%(default[0]))
         r1 = self.get_3_tuple(obj,default)
         r2 = self.get_3_tuple(default,default)
         r3 = self.get_3_tuple(default,default)

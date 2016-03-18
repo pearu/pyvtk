@@ -15,6 +15,9 @@ $Date: 2001/05/31 17:48:54 $
 Pearu Peterson
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 __version__ = "$Id: DataSet.py,v 1.3 2001/05/31 17:48:54 pearu Exp $"
 
 from functools import reduce
@@ -43,32 +46,32 @@ class DataSet(common.Common):
         for i in range(3):
             d = self.dimensions[i]
             if not common.is_int(d):
-                self.error('dimensions[%s] must be int but got %s'%(i,type(d)))
+                log.error('dimensions[%s] must be int but got %s'%(i,type(d)))
                 return 1
             if d<=0:
-                self.error('dimensions[%s] must be positive int but got %s'%(i,d))
+                log.error('dimensions[%s] must be positive int but got %s'%(i,d))
                 return 1
         if hasattr(self,'points'):
             d = reduce(lambda x,y:x*y,self.dimensions,1)
             if len(self.points)!=d:
-                self.error('mismatch of points length (%s) and dimensions size (%s)'%(len(self.points),d))
+                log.error('mismatch of points length (%s) and dimensions size (%s)'%(len(self.points),d))
                 return 1
         return 0
     def _check_origin(self):
         for i in range(3):
             d = self.origin[i]
             if not common.is_number(d):
-                self.error('origin[%s] must be number but got %s'%(i,type(d)))
+                log.error('origin[%s] must be number but got %s'%(i,type(d)))
                 return 1
         return 0
     def _check_spacing(self):
         for i in range(3):
             d = self.spacing[i]
             if not common.is_number(d):
-                self.error('spacing[%s] must be number but got %s'%(i,type(d)))
+                log.error('spacing[%s] must be number but got %s'%(i,type(d)))
                 return 1
             if d<=0:
-                self.error('spacing[%s] must be positive number but got %s'%(i,d))
+                log.error('spacing[%s] must be positive number but got %s'%(i,d))
                 return 1
         return 0
     def _check_int_seq(self,obj,mx_int):

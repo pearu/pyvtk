@@ -15,6 +15,9 @@ $Date: 2001/05/31 17:48:54 $
 Pearu Peterson
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 import pyvtk.DataSetAttr as DataSetAttr
 import pyvtk.common as common
 
@@ -35,7 +38,7 @@ class Field(DataSetAttr.DataSetAttr):
         if len(args): name = args[0]
         else: name = None
         if len(args)>1:
-            self.warning('Ignoring all arguments except the first')
+            log.warning('Ignoring all arguments except the first')
         self.name = self._get_name(name)
         data = {}
         mx = 0 
@@ -44,7 +47,7 @@ class Field(DataSetAttr.DataSetAttr):
         mx = max([len(l) for l in data.values()])
         for k,v in data.items():
             if len(v)<mx:
-                self.warning('Filling array %s (size=%s) with default value (%s) to obtain size=%s'%(repr(k),len(v),self.default_value,mx))
+                log.warning('Filling array %s (size=%s) with default value (%s) to obtain size=%s'%(repr(k),len(v),self.default_value,mx))
             while len(v)<mx:
                 v.append([self.default_value]*len(v[0]))
         self.data = data

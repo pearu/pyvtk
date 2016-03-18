@@ -15,6 +15,9 @@ $Date: 2001/06/13 08:35:00 $
 Pearu Peterson
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 __version__ = "$Id: Data.py,v 1.3 2001/06/13 08:35:00 pearu Exp $"
 
 import pyvtk.common as common
@@ -34,12 +37,12 @@ class Data(common.Common):
 
     def append(self,obj):
         if not is_datasetattr(obj):
-            self.error('expected DataSetAttr argument but got %s'%(type(obj)))
+            log.error('expected DataSetAttr argument but got %s'%(type(obj)))
             raise TypeError
         if self.length is None:
             self.length = obj.get_size()
         if not isinstance(obj,LookupTable) and self.length != obj.get_size():
-            self.error('attribute data %s must be of length %s (as defined by first DataSetAttr) but got %s'%(repr(obj.__class__.__name__),self.length,obj.get_size()))
+            log.error('attribute data %s must be of length %s (as defined by first DataSetAttr) but got %s'%(repr(obj.__class__.__name__),self.length,obj.get_size()))
             raise ValueError
         self.data.append(obj)
 

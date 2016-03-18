@@ -17,6 +17,9 @@ Pearu Peterson
 
 __version__ = "$Id: DataSetAttr.py,v 1.2 2001/05/31 17:48:54 pearu Exp $"
 
+import logging
+log = logging.getLogger(__name__)
+
 import pyvtk.common as common
 
 class DataSetAttr(common.Common):
@@ -34,7 +37,7 @@ class DataSetAttr(common.Common):
     def _get_name(self,name):
         if name is None:
             name = self._get_default_name()
-            self.warning('Using name=%s'%(repr(name)))
+            log.info('Using default name=%s'%(repr(name)))
             return name
         if common.is_string(name):
             name = name.strip().replace(' ','_')
@@ -45,7 +48,7 @@ class DataSetAttr(common.Common):
     def _get_lookup_table(self,name):
         if name is None:
             name = 'default'
-            self.warning('Using lookup_table=%s'%(repr(name)))
+            log.info('Using default lookup_table=%s'%(repr(name)))
             return name
         if common.is_string(name):
             name = name.strip().replace(' ','_')

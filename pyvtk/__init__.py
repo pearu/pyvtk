@@ -28,6 +28,11 @@ __all__ = ['StructuredPoints','StructuredGrid','UnstructuredGrid',
            'PointData','CellData',
            'VtkData']
 
+import logging
+log = logging.getLogger(__name__)
+# Silence logs - it's up to applications to do things with them
+log.addHandler(logging.NullHandler())
+
 import pyvtk.common as common
 
 from pyvtk.StructuredPoints import StructuredPoints, structured_points_fromfile
@@ -136,19 +141,19 @@ class VtkData(common.Common):
         for a in args:
             if common.is_string(a):
                 if len(a)>255:
-                    self.skipping('striping header string to a length =255')
+                    log.warning('striping header string to a length =255')
                 self.header = a[:255]
             elif is_pointdata(a):
                 self.point_data = a
             elif is_celldata(a):
                 self.cell_data = a
             else:
-                self.skipping('unexpexted argument %s'%(type(a)))
+                log.warning('unexpexted argument %s', type(a))
         if self.header is None:
             self.header = 'Really cool data'
-            self.warning('Using header=%s'%(repr(self.header)))
+            log.info('Using default header=%s'%(repr(self.header)))
         if self.point_data is None and self.cell_data is None:
-            self.warning('No data defined')
+            log.info('No point/cell data defined')
 
         if self.point_data is not None:
             s = self.structure.get_size()

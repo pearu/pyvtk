@@ -15,6 +15,9 @@ $Date: 2001/05/31 17:48:54 $
 Pearu Peterson
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 import math
 
 import pyvtk.DataSetAttr as DataSetAttr
@@ -37,7 +40,7 @@ class Normals(DataSetAttr.DataSetAttr):
         for v in self.get_3_tuple_list(normals,(self.default_value,)*3):
             n = math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])
             if n==0:
-                self.warning('cannot normalize zero vector')
+                log.warning('cannot normalize zero vector')
                 seq.append(v)
             elif n==1:
                 seq.append(v)

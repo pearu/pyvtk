@@ -15,6 +15,9 @@ $Date: 2011-10-03 10:16:56 $
 Pearu Peterson
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 import pyvtk.DataSet as DataSet
 import pyvtk.common as common
 
@@ -128,7 +131,7 @@ def unstructured_grid_fromfile(f,self):
     n = eval(n)
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     points = []
-    self.message('\tgetting %s points'%n)
+    log.debug('\tgetting %s points'%n)
     while len(points) < 3*n:
         points += list(map(eval,common._getline(f).split()))
     assert len(points)==3*n
@@ -138,7 +141,7 @@ def unstructured_grid_fromfile(f,self):
     n = eval(l[1])
     size = eval(l[2])
     lst = []
-    self.message('\tgetting %s cell indexes'%size)
+    log.debug('\tgetting %s cell indexes'%size)
     while len(lst) < size:
         line = common._getline(f).decode('ascii')
         lst += list(map(eval,line.split()))
@@ -151,7 +154,7 @@ def unstructured_grid_fromfile(f,self):
     l = common._getline(f).decode('ascii').split()
     assert len(l)==2 and l[0].strip().lower() == 'cell_types' and eval(l[1])==n,repr(l)
     tps = []
-    self.message('\tgetting %s cell types'%n)
+    log.debug('\tgetting %s cell types'%n)
     while len(tps) < n:
         tps += list(map(eval,common._getline(f).decode('ascii').split()))
     assert len(tps)==n
@@ -161,7 +164,7 @@ def unstructured_grid_fromfile(f,self):
         if k not in dictionary:
             dictionary[k] = []
         dictionary[k].append(i)
-    self.message('\tdone')
+    log.debug('unstructured_grid_fromfile done')
     return UnstructuredGrid(points,**dictionary), common._getline(f)
 
 if __name__ == "__main__":

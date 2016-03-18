@@ -15,6 +15,9 @@ $Date: 2002/11/19 20:40:11 $
 Pearu Peterson
 """
 
+import logging
+log = logging.getLogger(__name__)
+
 import pyvtk.DataSet as DataSet
 import pyvtk.common as common
 
@@ -88,7 +91,7 @@ def polydata_fromfile(f, self):
     n = eval(n)
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
 
-    self.message('\tgetting %s points'%n)
+    log.debug('\tgetting %s points'%n)
     while len(points) < 3*n:
         l = common._getline(f).decode('ascii')
         points += map(eval,l.split(' '))
