@@ -42,11 +42,11 @@ class StructuredGrid(DataSet.DataSet):
 
     def to_string(self, format='ascii'):
         t = self.get_datatype(self.points)
-        ret = ['DATASET STRUCTURED_GRID',
-               'DIMENSIONS %s %s %s'%self.dimensions,
-               'POINTS %s %s'%(self.get_size(),t),
+        ret = [b'DATASET STRUCTURED_GRID',
+               ('DIMENSIONS %s %s %s'%self.dimensions).encode(),
+               ('POINTS %s %s'%(self.get_size(),t)).encode(),
                self.seq_to_string(self.points,format,t)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
 
     def get_points(self):
         return self.points

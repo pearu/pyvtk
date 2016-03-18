@@ -47,15 +47,16 @@ class RectilinearGrid(DataSet.DataSet):
         tx = self.get_datatype(self.x)
         ty = self.get_datatype(self.y)
         tz = self.get_datatype(self.z)
-        ret = ['DATASET RECTILINEAR_GRID',
-               'DIMENSIONS %s %s %s'%self.dimensions,
-               'X_COORDINATES %s %s'%(len(self.x),tx),
+        ret = [b'DATASET RECTILINEAR_GRID',
+               ('DIMENSIONS %s %s %s'%self.dimensions).encode(),
+               ('X_COORDINATES %s %s'%(len(self.x),tx)).encode(),
                self.seq_to_string(self.x,format,tx),
-               'Y_COORDINATES %s %s'%(len(self.y),ty),
+               ('Y_COORDINATES %s %s'%(len(self.y),ty)).encode(),
                self.seq_to_string(self.y,format,ty),
-               'Z_COORDINATES %s %s'%(len(self.z),tz),
+               ('Z_COORDINATES %s %s'%(len(self.z),tz)).encode(),
                self.seq_to_string(self.z,format,tz)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
+
     def get_points(self):
         if hasattr(self,'points'):
             return self.points
@@ -64,12 +65,13 @@ class RectilinearGrid(DataSet.DataSet):
         return arr
 
 def rectilinear_grid_fromfile(f,self):
-    l = common._getline(f).split(' ')
+    l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'dimensions'
-    dims = map(eval,l[1:])
+    dims = list(map(eval,l[1:]))
     assert len(dims)==3
+    coords = {}
     for c in 'xyz':
-        l = common._getline(f)
+        l = common._getline(f).decode('ascii')
         k,n,datatype = [s.strip().lower() for s in l.split(' ')]
         if k!=c+'_coordinates':
             raise ValueError('expected %s_coordinates but got %s'%(c, repr(k)))
@@ -77,11 +79,11 @@ def rectilinear_grid_fromfile(f,self):
         assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
         points = []
         while len(points) < n:
-            points += map(eval,common._getline(f).split(' '))
+            points += map(eval,common._getline(f).decode('ascii').split(' '))
         assert len(points)==n
-        exec('%s_coords = points'%c)
-    assert map(len,[x_coords,y_coords,z_coords]) == dims
-    return RectilinearGrid(x_coords,y_coords,z_coords),common._getline(f)
+        coords[c] = points
+    assert list(map(len, [coords['x'], coords['y'], coords['z']])) == dims
+    return RectilinearGrid(coords['x'], coords['y'], coords['z']),common._getline(f)
 
 if __name__ == "__main__":
     print(RectilinearGrid([1,2,2,4,4,5.4]))

@@ -20,6 +20,8 @@ import struct
 from functools import reduce
 import numpy as np
 
+import six
+
 def is_sequence(obj):
     """Check if obj is sequence."""
     try:
@@ -49,7 +51,7 @@ def is_float(obj):
 
 def is_string(obj):
     """Check if obj is string."""
-    return isinstance(obj, str)
+    return isinstance(obj, six.string_types)
 
 def is_int255(obj):
     if is_sequence(obj):
@@ -270,12 +272,12 @@ class Common:
         assert is_sequence(seq),'expected sequence but got %s'%(type(seq))
         if format == 'ascii':
             if is_sequence2(seq):
-                sep = '\n'
+                sep = b'\n'
                 if is_sequence3(seq):
-                    sep = '\n\n'
+                    sep = b'\n\n'
                 return sep.join([self.seq_to_string(v,format,datatype) for v in seq])
             else:
-                return ' '.join(map(str,seq))
+                return ' '.join(map(str,seq)).encode()
         elif format == 'binary':
             if is_sequence2(seq):
                 r = b''.join([self.seq_to_string(v,format,datatype) for v in seq])

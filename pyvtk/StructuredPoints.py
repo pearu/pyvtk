@@ -50,7 +50,8 @@ class StructuredPoints(DataSet.DataSet):
                'DIMENSIONS %s %s %s'%self.dimensions,
                'ORIGIN %s %s %s'%self.origin,
                'SPACING %s %s %s'%self.spacing]
-        return '\n'.join(ret)
+        return '\n'.join(ret).encode()
+
     def get_points(self):
         if hasattr(self,'points'):
             return self.points
@@ -66,17 +67,17 @@ class StructuredPoints(DataSet.DataSet):
         return arr
 
 def structured_points_fromfile(f,self):
-    l = common._getline(f).split(' ')
+    l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'dimensions'
-    dims = map(eval,l[1:])
+    dims = list(map(eval,l[1:]))
     assert len(dims)==3
-    l = common._getline(f).split(' ')
+    l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'origin'
-    origin = map(eval,l[1:])
+    origin = list(map(eval,l[1:]))
     assert len(origin)==3
-    l = common._getline(f).split(' ')
+    l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'spacing'
-    spacing = map(eval,l[1:])
+    spacing = list(map(eval,l[1:]))
     assert len(spacing)==3
     return StructuredPoints(dims,origin,spacing),common._getline(f)
     

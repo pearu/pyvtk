@@ -44,11 +44,13 @@ class Normals(DataSetAttr.DataSetAttr):
             else:
                 seq.append(tuple([c/n for c in v]))
         self.normals = seq
+
     def to_string(self,format='ascii'):
         t = self.get_datatype(self.normals)
-        ret = ['NORMALS %s %s'%(self.name,t),
+        ret = [('NORMALS %s %s'%(self.name,t)).encode(),
                self.seq_to_string(self.normals,format,t)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
+
     def get_size(self):
         return len(self.normals)
 
@@ -58,7 +60,7 @@ def normals_fromfile(f,n,sl):
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     normals = []
     while len(normals) < 3*n:
-        normals += map(eval,common._getline(f).split(' '))
+        normals += map(eval,common._getline(f).decode('ascii').split(' '))
     assert len(normals) == 3*n
     return Normals(normals,dataname)
 

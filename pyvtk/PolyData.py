@@ -55,16 +55,16 @@ class PolyData(DataSet.DataSet):
 
     def to_string(self, format='ascii'):
         t = self.get_datatype(self.points)
-        ret = ['DATASET POLYDATA',
-               'POINTS %s %s'%(self.get_size(),t),
+        ret = [b'DATASET POLYDATA',
+               ('POINTS %s %s'%(self.get_size(),t)).encode(),
                self.seq_to_string(self.points,format,t)]
         for k in ['vertices','lines','polygons','triangle_strips']:
             kv = getattr(self,k)
             if kv==[] or kv[0]==[]: continue
             sz = self._get_nof_objs(kv)+len(kv)
-            ret += ['%s %s %s'%(k.upper(),len(kv),sz),
+            ret += [('%s %s %s'%(k.upper(),len(kv),sz)).encode(),
                     self.seq_to_string([[len(v)]+list(v) for v in kv],format,'int')]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
 
     def get_cell_size(self):
         sz = 0
@@ -77,14 +77,11 @@ class PolyData(DataSet.DataSet):
     def get_points(self):
         return self.points
 
-def polydata_fromfile(f,self):
+def polydata_fromfile(f, self):
     """Use VtkData(<filename>)."""
     points = []
-    vertices = []
-    lines = []
-    polygons = []
-    triangle_strips = []
-    l = common._getline(f)
+    data = dict(vertices=[], lines=[], polygons=[], triangle_strips=[])
+    l = common._getline(f).decode('ascii')
     k,n,datatype = [s.strip().lower() for s in l.split(' ')]
     if k!='points':
         raise ValueError('expected points but got %s'%(repr(k)))
@@ -93,13 +90,14 @@ def polydata_fromfile(f,self):
 
     self.message('\tgetting %s points'%n)
     while len(points) < 3*n:
-        l = common._getline(f)
+        l = common._getline(f).decode('ascii')
         points += map(eval,l.split(' '))
     assert len(points)==3*n
     while 1:
         l = common._getline(f)
         if l is None:
             break
+        l = l.decode('ascii')
         sl = l.split(' ')
         k = sl[0].strip().lower()
         if k not in ['vertices','lines','polygons','triangle_strips']:
@@ -108,16 +106,16 @@ def polydata_fromfile(f,self):
         n,size = map(eval,[sl[1],sl[2]])
         lst = []
         while len(lst) < size:
-            l = common._getline(f)
-            lst += map(eval,l.split(' '))
+            l = common._getline(f).decode('ascii')
+            lst += map(eval, l.split(' '))
         assert len(lst)==size
         lst2 = []
         j = 0
         for i in range(n):
             lst2.append(lst[j+1:j+lst[j]+1])
             j += lst[j]+1
-        exec('%s = lst2'%k)
-    return PolyData(points,vertices,lines,polygons,triangle_strips),l
+        data[k] = lst2
+    return PolyData(points,data['vertices'], data['lines'], data['polygons'], data['triangle_strips']), l.encode()
 
 if __name__ == "__main__":
     print(PolyData([[1,2],[2,4],4,5.4],[[1],[0]],[],[1,2,3]))

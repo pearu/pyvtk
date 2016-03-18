@@ -49,21 +49,23 @@ class Field(DataSetAttr.DataSetAttr):
                 v.append([self.default_value]*len(v[0]))
         self.data = data
     def to_string(self,format='ascii'):
-        ret = ['FIELD %s %s'%(self.name,len(self.data))]
-        for k,v in self.data.items():
+        ret = [('FIELD %s %s'%(self.name,len(self.data))).encode()]
+        for k in sorted(self.data):
+            v = self.data[k]
             t = self.get_datatype(v)
-            ret += ['%s %s %s %s'%(k,len(v[0]),len(v),t),
+            ret += [('%s %s %s %s'%(k,len(v[0]),len(v),t)).encode(),
                     self.seq_to_string(v,format,t)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
+
     def get_size(self):
-        return len(self.data.values()[0])
+        return len(list(self.data.values())[0])
 
 def field_fromfile(f,n,sl):
     dataname = sl[0]
     numarrays = eval(sl[1])
     dict = {}
     for i in range(numarrays):
-        l = common._getline(f).split(' ')
+        l = common._getline(f).decode('ascii').split(' ')
         assert len(l)==4,repr(l)
         name = l[0].strip()
         numcomps = eval(l[1])
@@ -72,7 +74,7 @@ def field_fromfile(f,n,sl):
         assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
         arr = []
         while len(arr)<numcomps*numtuples:
-            arr += map(eval,common._getline(f).split(' '))
+            arr += map(eval,common._getline(f).decode('ascii').split(' '))
         assert len(arr)==numcomps*numtuples
         arr2 = []
         for j in range(0,numtuples*numcomps,numcomps):

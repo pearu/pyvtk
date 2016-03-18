@@ -53,13 +53,13 @@ def scalars_fromfile(f,n,sl):
         numcomp = eval(sl[2])
     else:
         numcomp = 1
-    l = common._getline(f)
+    l = common._getline(f).decode('ascii')
     l = l.split(' ')
     assert len(l)==2 and l[0].lower() == 'lookup_table'
     tablename = l[1]
     scalars = []
     while len(scalars) < n:
-        scalars += map(eval,common._getline(f).split(' '))
+        scalars += map(eval,common._getline(f).decode('ascii').split(' '))
     assert len(scalars)==n
     return Scalars(scalars,dataname,tablename)
 

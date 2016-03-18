@@ -28,8 +28,6 @@ __all__ = ['StructuredPoints','StructuredGrid','UnstructuredGrid',
            'PointData','CellData',
            'VtkData']
 
-import os
-
 import pyvtk.common as common
 
 from pyvtk.StructuredPoints import StructuredPoints, structured_points_fromfile
@@ -167,6 +165,7 @@ class VtkData(common.Common):
         else:
             self.cell_data = CellData()
     def to_string(self, format = 'ascii'):
+        print(type(self.structure))
         ret = [b'# vtk DataFile Version 2.0',
                self.header.encode(),
                format.upper().encode(),
@@ -200,36 +199,38 @@ class VtkData(common.Common):
             filename += '.vtk'
         f = open(filename,'rb')
         l = f.readline()
-        fileversion = l.strip().replace(' ','').lower()
-        if not fileversion == '#vtkdatafileversion2.0':
+        fileversion = l.strip().replace(b' ',b'').lower()
+        if not fileversion == b'#vtkdatafileversion2.0':
             print('File %s is not in VTK 2.0 format, got %s but continuing anyway..' % (filename, fileversion))
-        self.header = f.readline().rstrip()
+        self.header = f.readline().rstrip().decode('ascii', 'replace')
         format = f.readline().strip().lower()
-        if format not in ['ascii','binary']:
+        if format not in [b'ascii', b'binary']:
             raise ValueError('Expected ascii|binary but got %s'%(repr(format)))
-        if format == 'binary':
+        if format == b'binary':
             raise NotImplementedError('reading vtk binary format')
-        l = common._getline(f).lower().split(' ')
+        l = common._getline(f).decode('ascii').lower().split(' ')
         if l[0].strip() != 'dataset':
             raise ValueError('expected dataset but got %s'%(l[0]))
         try:
             ff = eval(l[1]+'_fromfile')
         except NameError:
             raise NotImplementedError('%s_fromfile'%(l[1]))
-        self.structure,l = ff(f,self)
+        self.structure, l = ff(f,self)
 
         for i in range(2):
             if only_structure: break
-            if not l: break
-            l = [s.strip() for s in l.lower().split(' ')]
+            if not l:
+                break
+            l = [s.strip() for s in l.decode('ascii').lower().split(' ')]
             assert len(l)==2 and l[0] in ['cell_data','point_data'], l[0]
             data = l[0]
             n = eval(l[1])
             lst = []
             while 1:
                 l = common._getline(f)
-                if not l: break
-                sl = [s.strip() for s in l.split()]
+                if not l:
+                    break
+                sl = [s.strip() for s in l.decode('ascii').split()]
                 k = sl[0].lower()
                 if k not in ['scalars','color_scalars','lookup_table','vectors',
                              'normals','texture_coordinates','tensors','field']:

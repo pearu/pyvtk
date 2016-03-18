@@ -30,6 +30,7 @@ class DataSetAttr(common.Common):
         except KeyError:
             self.counters[n] = 0
         return self.__class__.__name__+str(self.counters[n])
+
     def _get_name(self,name):
         if name is None:
             name = self._get_default_name()
@@ -40,6 +41,7 @@ class DataSetAttr(common.Common):
             if name:
                 return name
         raise ValueError('name=%s must be non-empty string'%(repr(name)))
+
     def _get_lookup_table(self,name):
         if name is None:
             name = 'default'

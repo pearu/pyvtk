@@ -16,7 +16,8 @@ Pearu Peterson
 """
 
 __version__ = "$Id: DataSet.py,v 1.3 2001/05/31 17:48:54 pearu Exp $"
-import types
+
+from functools import reduce
 
 import pyvtk.common as common
 import pyvtk.Scalars as Scalars

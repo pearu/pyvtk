@@ -36,8 +36,9 @@ class LookupTable(DataSetAttr.DataSetAttr):
         self.table = self.get_n_seq_seq(table,[0,0,0,0])
         if len(self.table[0])!=4:
             raise ValueError('expected sequence of 4-sequences but got %s'%(len(self.table[0])))
-    def to_string(self,format='ascii'):
-        ret = ['LOOKUP_TABLE %s %s'%(self.name,len(self.table))]
+
+    def to_string(self, format='ascii'):
+        ret = [('LOOKUP_TABLE %s %s'%(self.name,len(self.table))).encode()]
         seq = self.table
         if format=='binary':
             if not common.is_int255(seq):
@@ -47,7 +48,8 @@ class LookupTable(DataSetAttr.DataSetAttr):
             if not common.is_float01(seq):
                 seq = self.int255_to_float01(seq)
             ret.append(self.seq_to_string(seq,format,'float'))
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
+
     def get_size(self):
         return len(self.table)
 
@@ -56,7 +58,7 @@ def lookup_table_fromfile(f,n,sl):
     size = eval(sl[1])
     table = []
     while len(table)<4*size:
-        table += map(eval,common._getline(f).split(' '))
+        table += map(eval,common._getline(f).decode('ascii').split(' '))
     assert len(table) == 4*size
     table2 = []
     for i in range(0,len(table),4):

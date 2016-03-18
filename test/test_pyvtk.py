@@ -55,7 +55,7 @@ class TestBase(unittest.TestCase):
         output_string = open(output_filepath,mode).read()
         input_string = open(input_filepath,mode).read()
 
-        self.assertMultiLineEqual(output_string, input_string)
+        self.assertEqual(output_string, input_string)
 
 class TestPolyData(TestBase):
 
