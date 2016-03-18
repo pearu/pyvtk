@@ -16,24 +16,6 @@ if 1 or not os.path.exists(version_file):
     f.close()
 exec(open(version_file).read())
 
-
-if sys.version[:3]>='2.3':
-    config = dict(\
-        download_url='https://pypi.python.org/pypi/PyVTK/',
-        keywords = ['VTK'],
-        classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-        'Natural Language :: English',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering :: Visualization',
-        ],
-        platforms = 'All')
-else:
-    config = {}
-
 print("PyVTK Version",__version__)
 setup (name = "PyVTK",
        version = __version__,
@@ -49,7 +31,19 @@ files in Python:
   VtkData - create VTK files from Python / read VTK files to Python.""",
        url = "https://code.google.com/p/pyvtk/",
        packages = ['pyvtk'],
-       **config
+       download_url='https://pypi.python.org/pypi/PyVTK/',
+       keywords = ['VTK'],
+       classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Topic :: Scientific/Engineering :: Visualization',
+        ],
+       platforms = 'All',
+       install_requires = ['six'],
        )
 
 
