@@ -19,7 +19,7 @@ Pearu Peterson
 import os,fileinput,re
 
 files=[]
-for d in ['lib']:
+for d in ['pyvtk']:
     for f in os.listdir(d):
         if f[-3:]=='.py' or f[-2:]=='.c':
             fn = os.path.join(d,f)

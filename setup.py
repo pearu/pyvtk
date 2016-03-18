@@ -4,14 +4,14 @@ import os
 import sys
 from distutils.core import setup
 
-version_file = os.path.join('lib','__version__.py')
+version_file = os.path.join('pyvtk','__version__.py')
 if 1 or not os.path.exists(version_file):
     major_version = 0
     minor_version = 4
     revisions_file =os.path.join('tools','get_revision.py')
     exec(open(revisions_file).read())
     __version__='%d.%d.%d'%(major_version,minor_version,revision_version)
-    f = open(os.path.join('lib/__version__.py'),'w')
+    f = open(os.path.join('pyvtk/__version__.py'),'w')
     f.write('__version__ = "%s"\n'%(__version__))
     f.close()
 exec(open(version_file).read())
@@ -49,7 +49,6 @@ files in Python:
   VtkData - create VTK files from Python / read VTK files to Python.""",
        url = "https://code.google.com/p/pyvtk/",
        packages = ['pyvtk'],
-       package_dir = {'pyvtk': 'lib'},
        **config
        )
 
