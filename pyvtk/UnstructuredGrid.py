@@ -124,28 +124,28 @@ class UnstructuredGrid(DataSet.DataSet):
     def get_points(self):
         return self.points
 
-def unstructured_grid_fromfile(f,self):
+def unstructured_grid_fromfile(f, self):
     l = common._getline(f).decode('ascii')
     k,n,datatype = [s.strip().lower() for s in l.split()]
     if k != 'points':
         raise ValueError( 'expected points but got %s'%(repr(k)))
-    n = eval(n)
+    n = int(n)
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     points = []
     log.debug('\tgetting %s points'%n)
     while len(points) < 3*n:
-        points += list(map(eval,common._getline(f).split()))
+        points += list(map(eval, common._getline(f).split()))
     assert len(points)==3*n
 
     l = common._getline(f).decode('ascii').split()
     assert len(l)==3 and l[0].strip().lower() == 'cells',repr(l)
-    n = eval(l[1])
-    size = eval(l[2])
+    n = int(l[1])
+    size = int(l[2])
     lst = []
     log.debug('\tgetting %s cell indexes'%size)
     while len(lst) < size:
         line = common._getline(f).decode('ascii')
-        lst += list(map(eval,line.split()))
+        lst += list(map(eval, line.split()))
     assert len(lst)==size
     lst2 = []
     j = 0
@@ -153,11 +153,11 @@ def unstructured_grid_fromfile(f,self):
         lst2.append(lst[j+1:j+lst[j]+1])
         j += lst[j]+1
     l = common._getline(f).decode('ascii').split()
-    assert len(l)==2 and l[0].strip().lower() == 'cell_types' and eval(l[1])==n,repr(l)
+    assert len(l)==2 and l[0].strip().lower() == 'cell_types' and int(l[1])==n, repr(l)
     tps = []
     log.debug('\tgetting %s cell types'%n)
     while len(tps) < n:
-        tps += list(map(eval,common._getline(f).decode('ascii').split()))
+        tps += list(map(int, common._getline(f).decode('ascii').split()))
     assert len(tps)==n
     dictionary = {}
     for i,t in zip(lst2,tps):

@@ -55,10 +55,10 @@ class LookupTable(DataSetAttr.DataSetAttr):
 
 def lookup_table_fromfile(f,n,sl):
     tablename = sl[0]
-    size = eval(sl[1])
+    size = int(sl[1])
     table = []
     while len(table)<4*size:
-        table += map(eval,common._getline(f).decode('ascii').split(' '))
+        table += map(eval, common._getline(f).decode('ascii').split(' '))
     assert len(table) == 4*size
     table2 = []
     for i in range(0,len(table),4):

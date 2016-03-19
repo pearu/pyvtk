@@ -67,7 +67,7 @@ class RectilinearGrid(DataSet.DataSet):
 def rectilinear_grid_fromfile(f,self):
     l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'dimensions'
-    dims = list(map(eval,l[1:]))
+    dims = list(map(int, l[1:]))
     assert len(dims)==3
     coords = {}
     for c in 'xyz':
@@ -75,11 +75,11 @@ def rectilinear_grid_fromfile(f,self):
         k,n,datatype = [s.strip().lower() for s in l.split(' ')]
         if k!=c+'_coordinates':
             raise ValueError('expected %s_coordinates but got %s'%(c, repr(k)))
-        n = eval(n)
+        n = int(n)
         assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
         points = []
         while len(points) < n:
-            points += map(eval,common._getline(f).decode('ascii').split(' '))
+            points += map(eval, common._getline(f).decode('ascii').split(' '))
         assert len(points)==n
         coords[c] = points
     assert list(map(len, [coords['x'], coords['y'], coords['z']])) == dims

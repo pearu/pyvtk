@@ -65,24 +65,25 @@ class Field(DataSetAttr.DataSetAttr):
 
 def field_fromfile(f,n,sl):
     dataname = sl[0]
-    numarrays = eval(sl[1])
+    numarrays = int(sl[1])
     dict = {}
     for i in range(numarrays):
         l = common._getline(f).decode('ascii').split(' ')
-        assert len(l)==4,repr(l)
+        assert len(l) == 4, repr(l)
         name = l[0].strip()
-        numcomps = eval(l[1])
-        numtuples = eval(l[2])
+        numcomps = int(l[1])
+        numtuples = int(l[2])
         datatype = l[3].lower()
         assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
         arr = []
         while len(arr)<numcomps*numtuples:
-            arr += map(eval,common._getline(f).decode('ascii').split(' '))
+            arr += map(eval, common._getline(f).decode('ascii').split(' '))
         assert len(arr)==numcomps*numtuples
         arr2 = []
         for j in range(0,numtuples*numcomps,numcomps):
             arr2.append(arr[j:j+numcomps])
         dict[name] = arr2
     return Field(dataname,**dict)
+
 if __name__ == "__main__":
     print(Field(a=[[2,23],3,3],c=[2,3,4,5]).to_string())

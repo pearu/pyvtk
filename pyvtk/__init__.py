@@ -41,7 +41,7 @@ from pyvtk.UnstructuredGrid import UnstructuredGrid, unstructured_grid_fromfile
 from pyvtk.RectilinearGrid import RectilinearGrid, rectilinear_grid_fromfile
 from pyvtk.PolyData import PolyData, polydata_fromfile
 
-from pyvtk.Scalars import Scalars,scalars_fromfile
+from pyvtk.Scalars import Scalars, scalars_fromfile
 from pyvtk.ColorScalars import ColorScalars, color_scalars_fromfile
 from pyvtk.LookupTable import LookupTable, lookup_table_fromfile
 from pyvtk.Vectors import Vectors, vectors_fromfile
@@ -52,6 +52,22 @@ from pyvtk.Field import Field, field_fromfile
 
 from pyvtk.Data import PointData,CellData, is_pointdata, is_celldata
 from pyvtk.DataSet import is_dataset
+
+parsers = {
+    'structured_points': structured_points_fromfile,
+    'structured_grid': structured_grid_fromfile,
+    'unstructured_grid': unstructured_grid_fromfile,
+    'rectilinear_grid': rectilinear_grid_fromfile,
+    'polydata': polydata_fromfile,
+    'scalars': scalars_fromfile,
+    'color_scalars': color_scalars_fromfile,
+    'lookup_table': lookup_table_fromfile,
+    'vectors': vectors_fromfile,
+    'normals': normals_fromfile,
+    'tensors': tensors_fromfile,
+    'texture_coordinates': texture_coordinates_fromfile,
+    'field': field_fromfile,
+}
 
 class VtkData(common.Common):
     """
@@ -217,8 +233,8 @@ class VtkData(common.Common):
         if l[0].strip() != 'dataset':
             raise ValueError('expected dataset but got %s'%(l[0]))
         try:
-            ff = eval(l[1]+'_fromfile')
-        except NameError:
+            ff = parsers[l[1]]
+        except KeyError:
             raise NotImplementedError('%s_fromfile'%(l[1]))
         self.structure, l = ff(f,self)
 
@@ -229,7 +245,7 @@ class VtkData(common.Common):
             l = [s.strip() for s in l.decode('ascii').lower().split(' ')]
             assert len(l)==2 and l[0] in ['cell_data','point_data'], l[0]
             data = l[0]
-            n = eval(l[1])
+            n = int(l[1])
             lst = []
             while 1:
                 l = common._getline(f)
@@ -241,8 +257,8 @@ class VtkData(common.Common):
                              'normals','texture_coordinates','tensors','field']:
                     break
                 try:
-                    ff = eval(k+'_fromfile')
-                except NameError:
+                    ff = parsers[k]
+                except KeyError:
                     raise NotImplementedError('%s_fromfile'%(k))
                 lst.append(ff(f,n,sl[1:]))
             if data == 'point_data':

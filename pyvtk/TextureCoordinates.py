@@ -16,6 +16,7 @@ Pearu Peterson
 """
 
 import pyvtk.DataSetAttr as DataSetAttr
+from . import common
 
 class TextureCoordinates(DataSetAttr.DataSetAttr):
     """Holds VTK Texture Coordinates.
@@ -44,12 +45,12 @@ class TextureCoordinates(DataSetAttr.DataSetAttr):
 def texture_coordinates_fromfile(f,n,sl):
     assert len(sl)==3
     dataname = sl[0].strip()
-    dim = eval(sl[1])
+    dim = int(sl[1])
     datatype = sl[2].strip().lower()
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     arr = []
     while len(arr)<dim*n:
-        arr += map(eval,common._getline(f).split(' '))
+        arr += map(eval, common._getline(f).split(' '))
     assert len(arr)==dim*n
     arr2 = []
     for i in range(0,len(arr),dim):

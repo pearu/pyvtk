@@ -69,7 +69,7 @@ class StructuredPoints(DataSet.DataSet):
 def structured_points_fromfile(f,self):
     l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'dimensions'
-    dims = list(map(eval,l[1:]))
+    dims = list(map(int, l[1:]))
     assert len(dims)==3
     l = common._getline(f).decode('ascii').split(' ')
     assert l[0].strip().lower() == 'origin'
