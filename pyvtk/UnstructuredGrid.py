@@ -73,7 +73,7 @@ class UnstructuredGrid(DataSet.DataSet):
         self.points = self.get_3_tuple_list(points,(0,0,0))
         sz = len(self.points)
         for k in self._vtk_cell_types_map.keys():
-            exec('self.%s = self.get_seq_seq(%s,[])'%(k,k))
+            setattr(self, k, self.get_seq_seq(locals()[k], []))
             if k=='vertex':
                 r = []
                 for v in self.vertex:
@@ -81,6 +81,7 @@ class UnstructuredGrid(DataSet.DataSet):
                 self.vertex = r
             if self._check_int_seq(getattr(self,k),sz):
                 raise ValueError('In cell %s: must be (seq of seq|seq) integers less than %s'%(k,sz))
+
         for k,n in self._vtk_cell_nums_map.items():
             if n==-1: continue
             kv = getattr(self,k)
