@@ -60,6 +60,15 @@ USAGE
      >>> from pydoc import help
      >>> help(pyvtk.VtkData)
 
+TESTING
+-------
+
+    cd test
+    python test_pyvtk.py
+
+To test files under development, install in 'editable' mode:
+
+    pip install -e .
 
 --- Pearu Peterson, 21 May 2001
     <pearu@cens.ioc.ee>
