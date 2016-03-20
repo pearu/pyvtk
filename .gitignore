@@ -4,3 +4,4 @@ build
 .ackrc
 dist
 MANIFEST
+examples/*.vtk
