@@ -174,8 +174,8 @@ class VtkData(common.Common):
                 raise ValueError('DataSet (cell_size=%s) and CellData (size=%s) have different sizes'%(s,s1))
         else:
             self.cell_data = CellData()
+
     def to_string(self, format = 'ascii'):
-        print(type(self.structure))
         ret = [b'# vtk DataFile Version 2.0',
                self.header.encode(),
                format.upper().encode(),
