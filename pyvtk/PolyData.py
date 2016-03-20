@@ -2,18 +2,8 @@
 """
 PolyData
 """
-"""
-
-Copyright 2001 Pearu Peterson all rights reserved,
-Pearu Peterson <pearu@ioc.ee>          
-Permission to use, modify, and distribute this software is given under the
-terms of the LGPL.  See http://www.fsf.org
-
-NO WARRANTY IS EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK.
-$Revision: 1.6 $
-$Date: 2002/11/19 20:40:11 $
-Pearu Peterson
-"""
+__author__ = "Pearu Peterson <pearu.peterson@gmail.com>"
+__license__ = "New BSD"
 
 import logging
 log = logging.getLogger(__name__)

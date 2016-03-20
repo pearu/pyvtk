@@ -5,21 +5,10 @@ PyVTK provides tools for manipulating VTK files in Python.
 VtkData - create VTK files from Python / read VTK files to Python
 
 """
-"""
-Copyright 2001 Pearu Peterson all rights reserved,
-Pearu Peterson <pearu@ioc.ee>          
-Permission to use, modify, and distribute this software is given under the
-terms of the LGPL.  See http://www.fsf.org
+__author__ = "Pearu Peterson <pearu.peterson@gmail.com>"
+__license__ = "New BSD"
 
-NO WARRANTY IS EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK.
-$Revision: 1.12 $
-$Date: 2010-03-03 13:41:41 $
-Pearu Peterson
-"""
 from pyvtk.__version__ import __version__
-
-__author__ = "Pearu Peterson <pearu@cens.ioc.ee>"
-__license__ = "LGPL (see http://www.fsf.org)"
 
 __all__ = ['StructuredPoints','StructuredGrid','UnstructuredGrid',
            'RectilinearGrid','PolyData',

@@ -2,18 +2,8 @@
 """
 UnstructuredGrid
 """
-"""
-
-Copyright 2001 Pearu Peterson all rights reserved,
-Pearu Peterson <pearu@ioc.ee>          
-Permission to use, modify, and distribute this software is given under the
-terms of the LGPL.  See http://www.fsf.org
-
-NO WARRANTY IS EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK.
-$Revision: 1.8 $
-$Date: 2011-10-03 10:16:56 $
-Pearu Peterson
-"""
+__author__ = "Pearu Peterson <pearu.peterson@gmail.com>"
+__license__ = "New BSD"
 
 import logging
 log = logging.getLogger(__name__)
