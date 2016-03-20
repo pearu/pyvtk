@@ -4,7 +4,7 @@
                           by
                      Pearu Peterson
 
-https://code.google.com/p/pyvtk/
+https://github.com/pearu/pyvtk
 
 INTRODUCTION
 ------------
@@ -27,24 +27,20 @@ INTRODUCTION
 LICENSE
 -------
 
-     GNU LGPL (see http://www.fsf.org)
+     New BSD
 
 REQUIREMENTS
 ------------
 
-     Python  - pyvtk is developed under Python 2.1. But it is tested
-               to work also under Python 2.0 and Python 1.5.2.
-               In future, Python 1.5 will be supported only if one
-               asks for it.
+     Python - pyvtk is developed under Python 2.1. Currently, it is
+               tested to work under Python 2.7 and Python 3.x.
 
 BUILDING and INSTALLING
 -----------------------
 
-     Python 2.x users, execute
-         python setup.py install
-
-     Python 1.x users, execute
-         make install
+     The preferred installation method is to use Python Index:
+     
+       pip install --upgrade pyvtk
 
 USAGE
 -----
@@ -70,5 +66,5 @@ To test files under development, install in 'editable' mode:
 
     pip install -e .
 
---- Pearu Peterson, 21 May 2001
-    <pearu@cens.ioc.ee>
+--- Pearu Peterson, March 20, 2016
+    <pearu.peterson@gmail.com>

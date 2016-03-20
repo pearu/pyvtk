@@ -1,5 +1,8 @@
 
-0.5 (???)
+0.5.7 (20 March, 2016)
+* Added Python 3 support (thanks to Thomas Kluyver).
+* Maintain the package (thanks to Thomas Kluyver and David Froger).
+* Development is moved under Github.
 
 0.4.85 (23 July 2014)
 * Fixed Bug#401063: python-pyvtk in Debian (note from Steve M. Robbins).

@@ -6,7 +6,8 @@ PyVTK provides the following tools for manipulating Visualization Toolkit (VTK) 
   * Data formats: PointData, CellData
   * DataSetAttr formats: Scalars, ColorScalars, LookupTable, Vectors, Normals, TextureCoordinates, Tensors, Field
 
-The latest release of PyVTK source distribution can be downloaded from https://pypi.python.org/pypi/PyVTK
+The latest release of PyVTK source distribution can be downloaded from
+https://pypi.python.org/pypi/PyVTK
 
 To install PyVTK, run
 ```
