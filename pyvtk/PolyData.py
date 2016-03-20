@@ -88,7 +88,7 @@ def polydata_fromfile(f, self):
     k,n,datatype = [s.strip().lower() for s in l.split(' ')]
     if k!='points':
         raise ValueError('expected points but got %s'%(repr(k)))
-    n = eval(n)
+    n = int(n)
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
 
     log.debug('\tgetting %s points'%n)
@@ -106,7 +106,8 @@ def polydata_fromfile(f, self):
         if k not in ['vertices','lines','polygons','triangle_strips']:
             break
         assert len(sl)==3
-        n,size = map(eval,[sl[1],sl[2]])
+        n = int(sl[1])
+        size = int(sl[2])
         lst = []
         while len(lst) < size:
             l = common._getline(f).decode('ascii')
@@ -118,6 +119,7 @@ def polydata_fromfile(f, self):
             lst2.append(lst[j+1:j+lst[j]+1])
             j += lst[j]+1
         data[k] = lst2
+
     return PolyData(points,data['vertices'], data['lines'], data['polygons'], data['triangle_strips']), l.encode()
 
 if __name__ == "__main__":

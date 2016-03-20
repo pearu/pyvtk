@@ -50,7 +50,7 @@ def scalars_fromfile(f,n,sl):
     datatype = sl[1].lower()
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     if len(sl)>2:
-        numcomp = eval(sl[2])
+        numcomp = int(sl[2])
     else:
         numcomp = 1
     l = common._getline(f).decode('ascii')

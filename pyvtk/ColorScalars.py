@@ -52,10 +52,10 @@ class ColorScalars(DataSetAttr.DataSetAttr):
 def color_scalars_fromfile(f,n,sl):
     assert len(sl)==2
     dataname = sl[0].strip()
-    nvals = eval(sl[1])
+    nvals = int(sl[1])
     scalars = []
     while len(scalars)<nvals*n:
-        scalars += map(eval,common._getline(f).split(' '))
+        scalars += map(float, common._getline(f).decode('ascii').split(' '))
     assert len(scalars)==nvals*n
     scalars2 = []
     for i in range(0,len(scalars),nvals):

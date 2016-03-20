@@ -60,13 +60,13 @@ class StructuredGrid(DataSet.DataSet):
 def structured_grid_fromfile(f,self):
     l = common._getline(f).split(' ')
     assert l[0].strip().lower() == 'dimensions'
-    dims = map(eval,l[1:])
+    dims = list(map(int, l[1:]))
     assert len(dims)==3
     l = common._getline(f)
     k,n,datatype = [s.strip().lower() for s in l.split(' ')]
     if k!='points':
         raise ValueError( 'expected points but got %s'%(repr(k)))
-    n = eval(n)
+    n = int(n)
     assert datatype in ['bit','unsigned_char','char','unsigned_short','short','unsigned_int','int','unsigned_long','long','float','double'],repr(datatype)
     points = []
     log.debug('\tgetting %s points'%n)
