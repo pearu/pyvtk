@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 
 import os
-import sys
 from distutils.core import setup
 
 version_file = os.path.join('pyvtk','__version__.py')
-if 1 or not os.path.exists(version_file):
+if 1 or not os.path.exists(version_file): # disable if block for release!
+    import subprocess
     major_version = 0
-    minor_version = 4
-    revisions_file =os.path.join('tools','get_revision.py')
-    exec(open(revisions_file).read())
+    minor_version = 5
+    process = subprocess.Popen(["git", "rev-list", "--count", "--first-parent", "HEAD"],
+                               stdout=subprocess.PIPE)
+    revision_version = int(process.communicate()[0])
     __version__='%d.%d.%d'%(major_version,minor_version,revision_version)
-    f = open(os.path.join('pyvtk/__version__.py'),'w')
+    f = open(version_file, 'w')
     f.write('__version__ = "%s"\n'%(__version__))
     f.close()
+
 exec(open(version_file).read())
 
 print("PyVTK Version",__version__)
@@ -29,21 +31,20 @@ setup (name = "PyVTK",
 PyVTK provides tools for manipulating VTK (Visualization Toolkit)
 files in Python:
   VtkData - create VTK files from Python / read VTK files to Python.""",
-       url = "https://code.google.com/p/pyvtk/",
+       url = "https://github.com/pearu/pyvtk",
        packages = ['pyvtk'],
-       download_url='https://pypi.python.org/pypi/PyVTK/',
        keywords = ['VTK'],
        classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-        'Natural Language :: English',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering :: Visualization',
+           'Development Status :: 5 - Production/Stable',
+           'Intended Audience :: Science/Research',
+           'License :: OSI Approved :: BSD License',
+           'Natural Language :: English',
+           'Operating System :: OS Independent',
+           'Programming Language :: Python',
+           'Programming Language :: Python :: 2',
+           'Programming Language :: Python :: 3',
+           'Topic :: Scientific/Engineering :: Visualization',
         ],
        platforms = 'All',
        install_requires = ['six'],
        )
-
-
