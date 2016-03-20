@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import sys
 from distutils.core import setup
 
 version_file = os.path.join('pyvtk','__version__.py')
@@ -29,9 +28,8 @@ setup (name = "PyVTK",
 PyVTK provides tools for manipulating VTK (Visualization Toolkit)
 files in Python:
   VtkData - create VTK files from Python / read VTK files to Python.""",
-       url = "https://code.google.com/p/pyvtk/",
+       url = "https://github.com/pearu/pyvtk",
        packages = ['pyvtk'],
-       download_url='https://pypi.python.org/pypi/PyVTK/',
        keywords = ['VTK'],
        classifiers=[
         'Development Status :: 4 - Beta',
@@ -40,6 +38,8 @@ files in Python:
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering :: Visualization',
         ],
        platforms = 'All',
