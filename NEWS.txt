@@ -1,5 +1,5 @@
 
-0.5.7 (20 March, 2016)
+0.5.14 (20 March, 2016)
 * Added Python 3 support (thanks to Thomas Kluyver).
 * Maintain the package (thanks to Thomas Kluyver and David Froger).
 * Development is moved under Github.
