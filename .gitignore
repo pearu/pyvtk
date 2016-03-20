@@ -2,3 +2,5 @@
 test/output
 build
 .ackrc
+dist
+MANIFEST
