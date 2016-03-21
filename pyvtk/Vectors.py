@@ -22,11 +22,13 @@ class Vectors(DataSetAttr.DataSetAttr):
     def __init__(self,vectors,name=None):
         self.name = self._get_name(name)
         self.vectors = self.get_3_tuple_list(vectors,(self.default_value,)*3)
+
     def to_string(self,format='ascii'):
         t = self.get_datatype(self.vectors)
-        ret = ['VECTORS %s %s'%(self.name,t),
+        ret = [('VECTORS %s %s'%(self.name,t)).encode(),
                self.seq_to_string(self.vectors,format,t)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
+
     def get_size(self):
         return len(self.vectors)
 
