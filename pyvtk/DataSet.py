@@ -22,6 +22,8 @@ import pyvtk.TextureCoordinates as TextureCoordinates
 import pyvtk.Tensors as Tensors
 import pyvtk.Field as Field
 
+from numpy import issubdtype,integer
+
 class DataSet(common.Common):
     """Abstract class.
     It describes the geometry and topology of VTK dataset.
@@ -65,6 +67,9 @@ class DataSet(common.Common):
                 return 1
         return 0
     def _check_int_seq(self,obj,mx_int):
+        if (hasattr(obj,'dtype')):
+            if issubdtype(obj.dtype,integer):
+                return 1 if obj.max() >= mx_int else 0
         if common.is_sequence(obj):
             for o in obj:
                 if self._check_int_seq(o,mx_int):
