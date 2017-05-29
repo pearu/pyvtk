@@ -23,7 +23,7 @@ class ColorScalars(DataSetAttr.DataSetAttr):
         self.name = self._get_name(name)
         self.scalars = self.get_n_seq_seq(scalars,self.default_value)
     def to_string(self,format='ascii'):
-        ret = ['COLOR_SCALARS %s %s'%(self.name,len(self.scalars[0]))]
+        ret = [('COLOR_SCALARS %s %s'%(self.name,len(self.scalars[0]))).encode()]
         seq = self.scalars
         if format=='binary':
             if not common.is_int255(seq):
@@ -33,7 +33,7 @@ class ColorScalars(DataSetAttr.DataSetAttr):
             if not common.is_float01(seq):
                 seq = self.int255_to_float01(seq)
             ret.append(self.seq_to_string(seq,format,'float'))
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
     def get_size(self):
         return len(self.scalars)
 
