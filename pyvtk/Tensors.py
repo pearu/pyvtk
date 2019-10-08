@@ -26,7 +26,7 @@ class Tensors(DataSetAttr.DataSetAttr):
         t = self.get_datatype(self.tensors)
         ret = ['TENSORS %s %s'%(self.name,t),
                self.seq_to_string(self.tensors,format,t)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
     def get_size(self):
         return len(self.tensors)
 
