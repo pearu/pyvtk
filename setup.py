@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import os
-from distutils.core import setup
+#from distutils.core import setup
+
+from setuptools import setup
 
 version_file = os.path.join('pyvtk','__version__.py')
 if 1 or not os.path.exists(version_file): # disable if block for release!
