@@ -6,21 +6,21 @@ import os
 from setuptools import setup
 
 version_file = os.path.join('pyvtk','__version__.py')
-if 1 or not os.path.exists(version_file): # disable if block for release!
-    import subprocess
-    major_version = 0
-    minor_version = 5
-    process = subprocess.Popen(["git", "rev-list", "--count", "--first-parent", "HEAD"],
-                               stdout=subprocess.PIPE)
-    revision_version = int(process.communicate()[0])
-    __version__='%d.%d.%d'%(major_version,minor_version,revision_version)
-    f = open(version_file, 'w')
-    f.write('__version__ = "%s"\n'%(__version__))
-    f.close()
+#if 1 or not os.path.exists(version_file): # disable if block for release!
+#    import subprocess
+#    major_version = 0
+#    minor_version = 5
+#    process = subprocess.Popen(["git", "rev-list", "--count", "--first-parent", "HEAD"],
+#                               stdout=subprocess.PIPE)
+#    revision_version = int(process.communicate()[0])
+#    __version__='%d.%d.%d'%(major_version,minor_version,revision_version)
+#    f = open(version_file, 'w')
+#    f.write('__version__ = "%s"\n'%(__version__))
+#    f.close()
 
 exec(open(version_file).read())
 
-print("PyVTK Version",__version__)
+#print("PyVTK Version",__version__)
 setup (name = "PyVTK",
        version = __version__,
        description = "PyVTK - tools for manipulating VTK files in Python",

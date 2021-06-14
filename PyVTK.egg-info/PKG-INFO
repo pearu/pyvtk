@@ -1,6 +1,6 @@
 Metadata-Version: 1.2
 Name: PyVTK
-Version: 0.5.22
+Version: 0.5.26
 Summary: PyVTK - tools for manipulating VTK files in Python
 Home-page: https://github.com/pearu/pyvtk
 Author: Pearu Peterson
