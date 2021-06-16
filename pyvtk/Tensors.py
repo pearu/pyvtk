@@ -7,7 +7,7 @@ __license__ = "New BSD"
 
 import pyvtk.DataSetAttr as DataSetAttr
 import pyvtk.common as common
-
+import numpy as np
 class Tensors(DataSetAttr.DataSetAttr):
     """Holds VTK Tensors.
     Usage:
@@ -21,12 +21,12 @@ class Tensors(DataSetAttr.DataSetAttr):
     """
     def __init__(self,tensors,name=None):
         self.name = self._get_name(name)
-        self.tensors = self.get_3_3_tuple_list(tensors,(self.default_value,)*3)
+        self.tensors = np.array(self.get_3_3_tuple_list(tensors,(self.default_value,)*3))
     def to_string(self,format='ascii'):
         t = self.get_datatype(self.tensors)
-        ret = ['TENSORS %s %s'%(self.name,t),
+        ret = [('TENSORS %s %s'%(self.name,t)).encode(),
                self.seq_to_string(self.tensors,format,t)]
-        return '\n'.join(ret)
+        return b'\n'.join(ret)
     def get_size(self):
         return len(self.tensors)
 
